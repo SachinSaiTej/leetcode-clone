@@ -1,33 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+// import { Landing } from './components/Landing'
 
+import { initializeApp } from "firebase/app";
+import { Signin } from './components/Signin';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useEffect } from 'react';
+// import { getAnalytics } from "firebase/analytics";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDOb4QWMc8PmSgrjma-MgxZb2GEVPhHGlc",
+  authDomain: "leetcode-clone-da47e.firebaseapp.com",
+  projectId: "leetcode-clone-da47e",
+  storageBucket: "leetcode-clone-da47e.appspot.com",
+  messagingSenderId: "737948768596",
+  appId: "1:737948768596:web:c29d825a3c3f1c1e8d50c1",
+  measurementId: "G-QEJ9S7RWKL"
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const app = initializeApp(firebaseConfig);
+// const analytics = getAnalytics(app);
+export const auth = getAuth();
 function App() {
-  const [count, setCount] = useState(0)
-
+  useEffect(() => {
+    onAuthStateChanged(auth, function (user) {
+      if (user && user.email) {
+        // setUser({
+        //     loading: false,
+        //     user: {
+        //         email: user.email,
+        //     },
+        // });
+        console.log("User : ", user);
+      } else {
+        // setUser({
+        //     loading: false,
+        // });
+        // No user is signed in.
+        console.log("There is no logged in user");
+      }
+    });
+  }, [])
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Signin />
+        {/* <Landing /> */}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
